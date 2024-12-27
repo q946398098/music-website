@@ -172,6 +172,14 @@ public class ConsumerServiceImpl extends ServiceImpl<ConsumerMapper, Consumer> i
     @Override
     public R userOfId(Integer id) {
         QueryWrapper<Consumer> queryWrapper = new QueryWrapper<>();
+        /*
+        eq(String column, Object val)：等于
+        ne(String column, Object val)：不等于
+        gt(String column, Object val)：大于
+        ge(String column, Object val)：大于等于
+        lt(String column, Object val)：小于
+        le(String column, Object val)：小于等于
+        */
         queryWrapper.eq("id",id);
         return R.success(null, consumerMapper.selectList(queryWrapper));
     }
