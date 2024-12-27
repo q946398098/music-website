@@ -19,9 +19,14 @@ public class Consumer {
     private Byte sex;
 
     private String phoneNum;
+
     @TableField(value = "email")
     private String email;
-
+    // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    // Date date = new Date();
+    // String formattedDate = dateFormat.format(date);
+    // String dateString = "2019-04-25 18:58:39";
+    // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private Date birth;
 
     private String introduction;

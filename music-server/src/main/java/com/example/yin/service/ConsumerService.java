@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 
+//定义接口---
+//IService 是一个泛型接口，定义了一组通用的基础方法，包括常见的增删改查操作。用户可以根据自己的需求和业务逻辑在自定义的服务接口中继承IService接口
 public interface ConsumerService extends IService<Consumer> {
 
     R addUser(ConsumerRequest registryRequest);

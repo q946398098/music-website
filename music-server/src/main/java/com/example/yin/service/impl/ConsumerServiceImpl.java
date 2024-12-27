@@ -24,9 +24,10 @@ import java.nio.charset.StandardCharsets;
 
 import static com.example.yin.constant.Constants.SALT;
 
+
+//MyBatisPlus提供了ServiceImpl类作为IService接口的实现类，可以通过继承ServiceImpl类来快速实现IService接口中的方法
 @Service
-public class ConsumerServiceImpl extends ServiceImpl<ConsumerMapper, Consumer>
-        implements ConsumerService {
+public class ConsumerServiceImpl extends ServiceImpl<ConsumerMapper, Consumer> implements ConsumerService {
 
     @Autowired
     private ConsumerMapper consumerMapper;
