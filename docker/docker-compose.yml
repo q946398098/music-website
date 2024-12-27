@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  redis:
+    build: ./redis  # 指定构建上下文和 Dockerfile 路径
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+  node_client:
+    build: ./node_client
+    ports:
+      - "8083:8083"
+    volumes:
+      - node_client:/appClient/dist
+    networks:
+      - backend
+  node_admin:
+    build: ./node_admin
+    ports:
+      - "8084:8084"
+    volumes:
+      - node_admin:/appManage/dist
+
+  mysql:
+    build: ./mysql  # 指定构建上下文和 Dockerfile 路径
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: batata
+      MYSQL_DATABASE: tp_music
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_5_7_data:/var/lib/mysql
+    networks:
+      - backend
+
+volumes:
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /services/redis_data
+  mysql_5_7_data:
+    driver: local
+    driver_opts:
+      type: none
+      o : bind
+      device : /services/mysql_data
+  node_client:
+    driver: local
+    driver_opts:
+      type: none
+      o : bind
+      device: /services/node_client
+  node_admin:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /services/node_admin
+networks:
+  backend:
+
