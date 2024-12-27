@@ -9,7 +9,10 @@ public class RandomUtils {
         StringBuilder randomString = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
+            //生成一个随机的整数，范围从 0(包含)到指定值(不包含)
+            //nextDouble
             int randomIndex = random.nextInt(characters.length());
+            //该索引上的字符
             char randomChar = characters.charAt(randomIndex);
             randomString.append(randomChar);
         }
