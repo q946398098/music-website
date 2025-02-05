@@ -65,7 +65,7 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song> implements So
             byte[] fileContent = new byte[0];
             try {
                 fileContent = lrcfile.getBytes();
-                String content = new String(fileContent, "GB2312");
+                String content = new String(fileContent, "UTF-8");
                 song.setLyric(content);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -224,7 +224,7 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song> implements So
             byte[] fileContent = new byte[0];
             try {
                 fileContent = lrcFile.getBytes();
-                String content = new String(fileContent, "GB2312");
+                String content = new String(fileContent, "UTF-8");
                 song.setLyric(content);
             } catch (IOException e) {
                 throw new RuntimeException(e);
