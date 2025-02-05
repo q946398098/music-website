@@ -8,9 +8,11 @@ import com.example.yin.mapper.SingerMapper;
 import com.example.yin.model.domain.Singer;
 import com.example.yin.model.request.SingerRequest;
 import com.example.yin.service.SingerService;
+import com.example.yin.service.SongService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -21,6 +23,8 @@ public class SingerServiceImpl extends ServiceImpl<SingerMapper, Singer> impleme
 
     @Autowired
     private SingerMapper singerMapper;
+    @Autowired
+    private SongService songService;
 
     @Override
     public R updateSingerMsg(SingerRequest updateSingerRequest) {
@@ -49,8 +53,9 @@ public class SingerServiceImpl extends ServiceImpl<SingerMapper, Singer> impleme
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class) //歌曲歌手都要删成功才行。
     public R deleteSinger(Integer id) {
-        if (singerMapper.deleteById(id) > 0) {
+        if (singerMapper.deleteById(id) > 0 && songService.deleteSongBySingerId(id).getCode() == 200) {
             return R.success("删除成功");
         } else {
             return R.error("删除失败");

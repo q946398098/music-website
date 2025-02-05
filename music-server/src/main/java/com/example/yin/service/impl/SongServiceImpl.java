@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -148,7 +149,10 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song> implements So
         }
     }
 
+
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public R deleteSong(Integer id) {
         Song song = songMapper.selectById(id);
         String path = song.getUrl();
@@ -231,5 +235,13 @@ public class SongServiceImpl extends ServiceImpl<SongMapper, Song> implements So
         } else {
             return R.error("更新失败");
         }
+    }
+
+    @Override
+    public R deleteSongBySingerId(Integer singerId) {
+        QueryWrapper<Song> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("singer_id",singerId);
+        songMapper.delete(queryWrapper);
+        return R.success("删除成功");
     }
 }

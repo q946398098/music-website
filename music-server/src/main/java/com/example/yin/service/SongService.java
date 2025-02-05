@@ -27,4 +27,6 @@ public interface SongService extends IService<Song> {
     R songOfSingerName(String name);
 
     R updateSongLrc(MultipartFile lrcFile, int id);
+
+    R deleteSongBySingerId(Integer singerId);
 }
