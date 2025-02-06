@@ -2,9 +2,11 @@
 
 import {computed, getCurrentInstance, reactive, ref} from "vue";
 import {HttpManager} from "@/api";
-import {Icon} from "@/enums";
+import {Icon, RouterName} from "@/enums";
 import {useStore} from "vuex";
 import { parseLyric } from "@/utils";
+import DelDialog from "@/components/dialog/DelDialog.vue";
+import mixin from "@/mixins/mixin";
 
 const singerId = ref('')
 const singerName = ref('')
@@ -17,6 +19,8 @@ const ZANTING = ref(Icon.ZANTING);
 const tableData = ref([]); // 记录歌曲，用于显示
 const currentPage = ref(1);
 const pageSize = ref(5);
+
+const { routerManager, beforeImgUpload, beforeSongUpload } = mixin();
 
 
 /*深层次的*/
@@ -60,9 +64,11 @@ const deleteAll = () => {
   console.log('批量删除')
 }
 
+const delVisible = ref(false); // 显示删除框
 
 function deleteRow(id) {
-  console.log(id);
+  idx.value = id;
+  delVisible.value = true;
 }
 
 function updateSongImg(id) {
@@ -141,6 +147,66 @@ const registerForm = reactive({
   introduction: "",
   lyric: "",
 });
+
+async function confirm(){
+  const result = (await HttpManager.deleteSong(idx.value)) as ResponseBody;
+  (proxy as any).$message({
+    message: result.message,
+    type: result.type,
+  });
+  if (result.success) getData();
+  delVisible.value = false;
+}
+
+
+function goCommentPage(id) {
+  const breadcrumbList = reactive([
+    {
+      path: RouterName.Singer,
+      name: "歌手管理",
+    },
+    {
+      path: RouterName.Song,
+      query: {
+        id: singerId.value,
+        name: singerName.value,
+      },
+      name: "歌曲信息",
+    },
+    {
+      path: "",
+      name: "评论详情",
+    },
+  ]);
+  proxy.$store.commit("setBreadcrumbList", breadcrumbList);
+  routerManager(RouterName.Comment, { path: RouterName.Comment, query: { id, type: 0 } });
+}
+
+// 更新图片
+function handleImgSuccess(res, file) {
+  (proxy as any).$message({
+    message: res.message,
+    type: res.type,
+  });
+  if (res.success) getData();
+}
+
+function handleSongSuccess(res) {
+  (proxy as any).$message({
+    message: res.message,
+    type: res.type,
+  });
+  if (res.success) getData();
+}
+
+
+function handleLyricsSuccess(res) {
+  (proxy as any).$message({
+    message: res.message,
+    type: res.type,
+  });
+  if (res.success) getData();
+}
 
 
 </script>
@@ -253,6 +319,9 @@ const registerForm = reactive({
   </template>
 </el-dialog>
 
+
+<!--删除提示 $event就是传输的变量-->
+<del-dialog :delVisible="delVisible" @confirm="confirm" @cancelRow="delVisible = $event"></del-dialog>
 </template>
 
 <style scoped>

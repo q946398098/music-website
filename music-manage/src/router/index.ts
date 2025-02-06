@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/song',
-        component: () => import('@/views/SongPage1.vue'),
+        component: () => import('@/views/SongPage.vue'),
         meta: { title: 'Song' }
       },
       {

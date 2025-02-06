@@ -45,10 +45,28 @@ export default function () {
     const isLt10M = file.size / 1024 / 1024 < ltCode;
     const testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
     const extension = testmsg === "mp3";
-
     if (!extension) {
       (proxy as any).$message({
         message: "上传文件只能是mp3格式！",
+        type: "error",
+      });
+    }
+    if (!isLt10M) {
+      (proxy as any).$message.error(`上传头像图片大小不能超过 ${ltCode}MB!`);
+    }
+
+    return extension && isLt10M;
+  }
+
+  function beforeLrcUpload(file) {
+    const ltCode = 10;
+    const isLt10M = file.size / 1024 / 1024 < ltCode;
+    let testmsg = file.name.substring(file.name.lastIndexOf(".") + 1);
+    testmsg = testmsg.toLowerCase();
+    const extension = testmsg === "lrc";
+    if (!extension) {
+      (proxy as any).$message({
+        message: "上传文件只能是lrc格式！",
         type: "error",
       });
     }
@@ -86,5 +104,5 @@ export default function () {
     proxy.$router.go(step);
   }
 
-  return { changeSex, routerManager, goBack, beforeImgUpload, beforeSongUpload };
+  return { changeSex, routerManager, goBack, beforeImgUpload, beforeSongUpload ,beforeLrcUpload};
 }
