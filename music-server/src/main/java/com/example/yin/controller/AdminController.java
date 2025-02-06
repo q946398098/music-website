@@ -4,6 +4,7 @@ import com.example.yin.common.R;
 import com.example.yin.model.request.AdminRequest;
 import com.example.yin.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,4 +24,13 @@ public class AdminController {
     public R loginStatus(@RequestBody AdminRequest adminRequest, HttpSession session) {
         return adminService.verityPasswd(adminRequest, session);
     }
+
+
+    @GetMapping("/admin/logout")
+    public R logout(HttpSession session) {
+        session.removeAttribute("name");
+        return R.success("退出成功");
+    }
+
+
 }

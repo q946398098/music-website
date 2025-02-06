@@ -20,7 +20,7 @@ const tableData = ref([]); // 记录歌曲，用于显示
 const currentPage = ref(1);
 const pageSize = ref(5);
 
-const { routerManager, beforeImgUpload, beforeSongUpload } = mixin();
+const { routerManager, beforeImgUpload, beforeSongUpload,beforeLrcUpload } = mixin();
 
 
 /*深层次的*/
@@ -208,12 +208,20 @@ function handleLyricsSuccess(res) {
   if (res.success) getData();
 }
 
+const breadcrumbList = computed(() => store.getters.breadcrumbList);
+
+
 
 </script>
 
 
 
 <template>
+<el-breadcrumb class="crumbs" separator="/">
+  <el-breadcrumb-item v-for="item in breadcrumbList" :key="item.name" :to="{ path: item.path, query: item.query }">
+    {{ item.name }}
+  </el-breadcrumb-item>
+</el-breadcrumb>
 <div class="container">
   <div class="handle-box">
     <el-button @click="deleteAll">批量删除</el-button>
@@ -248,7 +256,7 @@ function handleLyricsSuccess(res) {
     </el-table-column>
     <el-table-column label="资源更新" width="120" align="center">
       <template v-slot="scope">
-        <el-upload :action="updateSongImg(scope.row.id)" :show-file-list="false" :on-success="handleImgSuccess" :before-upload="beforeImgUpload">
+        <el-upload name="file" :action="updateSongImg(scope.row.id)" :show-file-list="false" :on-success="handleImgSuccess" :before-upload="beforeImgUpload">
           <el-button>更新图片</el-button>
         </el-upload>
         <br />
@@ -256,7 +264,7 @@ function handleLyricsSuccess(res) {
           <el-button>更新歌曲</el-button>
         </el-upload>
         <br />
-        <el-upload :action="updateSongLrc(scope.row.id)" :show-file-list="false" :on-success="handleSongSuccess" :before-upload="beforeSongUpload">
+        <el-upload :action="updateSongLrc(scope.row.id)" :show-file-list="false" :on-success="handleLyricsSuccess" :before-upload="beforeLrcUpload">
           <el-button>更新歌词</el-button>
         </el-upload>
       </template>

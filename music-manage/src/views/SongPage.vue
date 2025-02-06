@@ -58,6 +58,9 @@ export default defineComponent({
       tableData.value = [];
       tempDate.value = [];
       const result = (await HttpManager.getSongOfSingerId(singerId.value)) as ResponseBody;
+      console.log("----------------")
+      console.log(result)
+      console.log("----------------")
       tableData.value = result.data;
       tempDate.value = result.data;
       currentPage.value = 1;
@@ -337,7 +340,7 @@ export default defineComponent({
       </el-table-column>
       <el-table-column label="资源更新" width="120" align="center">
         <template v-slot="scope">
-          <el-upload :action="updateSongImg(scope.row.id)" :show-file-list="false" :on-success="handleImgSuccess" :before-upload="beforeImgUpload">
+          <el-upload name="file" :action="updateSongImg(scope.row.id)" :show-file-list="false" :on-success="handleImgSuccess" :before-upload="beforeImgUpload">
             <el-button>更新图片</el-button>
           </el-upload>
           <br />

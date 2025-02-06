@@ -62,6 +62,8 @@ export default defineComponent({
     // 用户名下拉菜单选择事件
     function handleCommand(command) {
       if (command === "loginout") {
+        //
+        HttpManager.logout()
         routerManager(RouterName.SignIn, { path: RouterName.SignIn });
       }
     }
