@@ -4,6 +4,7 @@ import com.example.yin.model.domain.Consumer;
 import com.example.yin.service.impl.ConsumerServiceImpl;
 import com.example.yin.utils.Md5Util;
 import com.example.yin.utils.TestFileUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,11 @@ public class YinMusicApplicationTests {
 //    ConsumerServiceImpl consumerService;
     @Test
     public void consumerTest3() throws ParseException, NoSuchAlgorithmException {
+
+
+        String s1 = DigestUtils.md5Hex("123456");
+
+        System.out.println(s1);
 
         String s = Md5Util.md5("123456");
 
