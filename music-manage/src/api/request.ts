@@ -22,7 +22,6 @@ axios.interceptors.response.use(
   },
   // 服务器状态码不是2开头的的情况
   error => {
-    console.log(error.response)
     if (error.response.status) {
       switch (error.response.status) {
         // 401: 未登录
@@ -33,6 +32,7 @@ axios.interceptors.response.use(
               // redirect: router.currentRoute.fullPath
             },
           });
+          return Promise.reject('Unauthorized')
           break;
         case 403:
           // console.log('管理员权限已修改请重新登录')
@@ -45,6 +45,7 @@ axios.interceptors.response.use(
               },
             });
           }, 1000);
+          return Promise.reject('Unauthorized')
           break;
 
         // 404请求不存在
@@ -71,7 +72,12 @@ export function get(url, params?: object) {
   return new Promise((resolve, reject) => {
     axios.get(url, params).then(
       response => resolve(response.data),
-      error => reject(error)
+      error => {
+        if(error == 'Unauthorized'){
+          return;
+        }
+        reject(error)
+      }
     )
   });
 }
@@ -86,7 +92,12 @@ export function post(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
       response => resolve(response.data),
-      error => reject(error)
+      error => {
+        if(error == 'Unauthorized'){
+          return;
+        }
+        reject(error)
+      }
     );
   });
 }
@@ -101,7 +112,12 @@ export function deletes(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.delete(url, data).then(
       response => resolve(response.data),
-      error => reject(error)
+      error => {
+        if(error == 'Unauthorized'){
+          return;
+        }
+        reject(error)
+      }
     );
   });
 }
@@ -116,7 +132,12 @@ export function put(url, data = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, data).then(
       response => resolve(response.data),
-      error => reject(error)
+      error => {
+        if(error == 'Unauthorized'){
+          return;
+        }
+        reject(error)
+      }
     );
   });
 }

@@ -6,6 +6,7 @@ const HttpManager = {
     // =======================> 管理员 API 完成
     // 是否登录成功
     getLoginStatus: ({username, password}) => post(`admin/login/status`, {username, password}),
+    logout: () => get(`admin/logout`),
 
     // =======================> 用户 API 完成
     // 返回所有用户
