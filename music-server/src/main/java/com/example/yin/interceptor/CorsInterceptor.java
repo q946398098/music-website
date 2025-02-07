@@ -1,4 +1,4 @@
-package com.example.yin.config;
+package com.example.yin.interceptor;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
