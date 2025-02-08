@@ -35,11 +35,19 @@ public class WebCharacterEncodingFilter implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         if (!converters.isEmpty()) {
+//            System.out.println("消息转换器长度是+" + converters.size());
+            //将第一个扔到最后面，否则会覆盖掉默认的转换器
             converters.add(converters.get(0));
+            //将自己的转换器放到第一个
             converters.set(0, responseBodyConverter());
         } else {
             converters.add(responseBodyConverter());
         }
+
+        /*添加消息转换器，*/
+//        for(HttpMessageConverter s: converters ){
+//            System.out.println("消息转换器是+" + s.getClass().getName());
+//        }
     }
 }
 
