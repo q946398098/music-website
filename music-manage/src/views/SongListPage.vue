@@ -6,7 +6,7 @@
       <el-button type="primary" @click="centerDialogVisible = true">添加歌单</el-button>
       <el-button type="primary" @click="exportPlaylist">导出歌单</el-button>
     </div>
-    <el-table height="550px" border size="small" :data="data" @selection-change="handleSelectionChange">
+    <el-table height="550px" border size="small" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="40" align="center"></el-table-column>
       <el-table-column label="ID" prop="id" width="50" align="center"></el-table-column>
       <el-table-column label="歌单图片" width="110" align="center">
@@ -50,7 +50,7 @@
         layout="total, prev, pager, next"
         :current-page="currentPage"
         :page-size="pageSize"
-        :total="tableData.length"
+        :total="totalRecord"
         @current-change="handleCurrentChange"
     >
     </el-pagination>
@@ -120,12 +120,14 @@ export default defineComponent({
     const tableData = ref([]); // 记录歌曲，用于显示
     const tempDate = ref([]); // 记录歌曲，用于搜索时能临时记录一份歌曲列表
     const pageSize = ref(5); // 页数
+    const totalRecord = ref(0);
     const currentPage = ref(1); // 当前页
 
     // 计算当前表格中的数据
-    const data = computed(() => {
-      return tableData.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
-    });
+    // const data = computed(() => {
+    //   /*---逗我玩呢*/
+    //   // return tableData.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
+    // });
 
     const searchWord = ref(""); // 记录输入框输入的内容
     watch(searchWord, () => {
@@ -147,10 +149,13 @@ export default defineComponent({
     async function getData() {
       tableData.value = [];
       tempDate.value = [];
-      const result = (await HttpManager.getSongList()) as ResponseBody;
-      tableData.value = result.data;
-      tempDate.value = result.data;
-      currentPage.value = 1;
+      const result = (await HttpManager.getSongListPage(currentPage.value,pageSize.value)) as ResponseBody;
+      console.log(result)
+      tableData.value = result.data.records;
+      tempDate.value = result.data.records;
+      currentPage.value = result.data.current;
+      pageSize.value = result.data.size;
+      totalRecord.value  = result.data.total;
     }
 
     function exportPlaylist() {
@@ -176,6 +181,7 @@ export default defineComponent({
     // 获取当前页
     function handleCurrentChange(val) {
       currentPage.value = val;
+      getData()
     }
 
     function uploadUrl(id) {
@@ -328,13 +334,13 @@ export default defineComponent({
 
     return {
       searchWord,
-      data,
       tableData,
       centerDialogVisible,
       editVisible,
       delVisible,
       pageSize,
       currentPage,
+      totalRecord,
       registerForm,
       editForm,
       addsongList,

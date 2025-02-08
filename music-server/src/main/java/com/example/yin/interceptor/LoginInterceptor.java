@@ -21,15 +21,13 @@ public class LoginInterceptor implements HandlerInterceptor {
     private ObjectMapper objectMapper;
     @Override
     public boolean preHandle( HttpServletRequest request,  HttpServletResponse response,  Object handler) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("name") == null){
-            System.out.println("----1");
+        HttpSession session = request.getSession(false); //true 总是确保返回一个会话对象，如果没有会话则创建一个 , false 只返回当前已存在的会话，如果没有会话则返回null
+        if ((session == null || session.getAttribute("name") == null) && !request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             R errorResponse = R.error("未授权，请登录");
             String jsonResponse = objectMapper.writeValueAsString(errorResponse);
-//            response.getWriter().write("{\"message\": \"未授权，请登录\"}");
             response.getWriter().write(jsonResponse);
             return false;
         }

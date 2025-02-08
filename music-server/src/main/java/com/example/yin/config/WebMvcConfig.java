@@ -1,5 +1,6 @@
 package com.example.yin.config;
 
+//import com.example.yin.interceptor.CorsInterceptor;
 import com.example.yin.interceptor.CorsInterceptor;
 import com.example.yin.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +29,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        /**/
-//        registry.addInterceptor(corsInterceptor())
-//                .addPathPatterns("/**");
+
+        registry.addInterceptor(corsInterceptor())
+               .addPathPatterns("/**");
 
         registry.addInterceptor(loginInterceptor())
                 .addPathPatterns("/**")

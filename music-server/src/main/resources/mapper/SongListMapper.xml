@@ -17,4 +17,9 @@
     introduction
   </sql>
 
+
+  <select id="songListPage" resultType="com.example.yin.model.domain.SongList">
+    select * from song_list
+  </select>
+
 </mapper>

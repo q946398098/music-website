@@ -33,6 +33,11 @@ public class SongListController {
         return songListService.allSongList();
     }
 
+    @GetMapping("/songListPage")
+    public R songListPage(final Integer pageNum , final Integer pageSize) {
+        return songListService.songListPage(pageNum,pageSize);
+    }
+
     // 返回标题包含文字的歌单
     @GetMapping("/songList/likeTitle/detail")
     public R songListOfLikeTitle(@RequestParam String title) {

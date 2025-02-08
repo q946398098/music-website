@@ -1,6 +1,8 @@
 package com.example.yin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.yin.common.R;
 import com.example.yin.controller.MinioUploadController;
@@ -26,6 +28,13 @@ public class SongListServiceImpl extends ServiceImpl<SongListMapper, SongList> i
     private SongListMapper songListMapper;
     @Value("${minio.bucket-name}")
     String bucketName;
+
+
+
+    public R songListPage(Integer pageNum, Integer pageSize) {
+        IPage<SongList> songListPage = songListMapper.songListPage(new Page<>(pageNum, pageSize));
+        return R.success("ok",songListPage);
+    }
 
     @Override
     public R updateSongListMsg(SongListRequest updateSongListRequest) {
@@ -72,6 +81,8 @@ public class SongListServiceImpl extends ServiceImpl<SongListMapper, SongList> i
         queryWrapper.like("style",style);
         return R.success(null, songListMapper.selectList(queryWrapper));
     }
+
+
 
     @Override
     public R addSongList(SongListRequest addSongListRequest) {

@@ -80,6 +80,7 @@ const HttpManager = {
     setSongList: ({title, introduction, style}) => post(`songList/add`, {title, introduction, style}),
     // 获取全部歌单
     getSongList: () => get(`songList`),
+    getSongListPage: (pageNum, pageSize) => get(`songListPage?pageNum=${pageNum}&pageSize=${pageSize}`),
     // 更新歌单信息
     updateSongListMsg: ({id, title, introduction, style}) => post(`songList/update`, {id, title, introduction, style}),
     // 删除歌单
