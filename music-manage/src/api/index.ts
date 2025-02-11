@@ -69,6 +69,7 @@ const HttpManager = {
         introduction,
         lyric
     }),
+    addConsumer: (username, sex) => post(`user/add`, {"username":username, "sex":sex}),
     updateSongUrl: (id) => `${getBaseURL()}/song/url/update?id=${id}`,
     updateSongImg: (id) => `${getBaseURL()}/song/img/update?id=${id}`,
     updateSongLrc: (id) => `${getBaseURL()}/song/lrc/update?id=${id}`,

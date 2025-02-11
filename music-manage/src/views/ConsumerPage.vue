@@ -3,6 +3,7 @@
     <div class="handle-box">
       <el-button @click="deleteAll">批量删除</el-button>
       <el-input v-model="searchWord" placeholder="筛选用户"></el-input>
+      <el-button type="primary" @click="centerDialogVisible = true">添加用户</el-button>
     </div>
 
     <el-table height="550px" border size="small" :data="data" @selection-change="handleSelectionChange">
@@ -63,7 +64,30 @@
       @current-change="handleCurrentChange"
     >
     </el-pagination>
+    <el-dialog title="添加用户" v-model="centerDialogVisible" width="40%">
+      <el-form label-width="80px" :model="registerForm" :rules="AddRule">
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="registerForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-radio-group v-model="registerForm.sex">
+            <el-radio :label="0">女</el-radio>
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="2">保密</el-radio>
+            <el-radio :label="2">组合</el-radio>
+            <el-radio :label="3">不明</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+              <span class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addUser">确 定</el-button>
+             </span>
+      </template>
+    </el-dialog>
   </div>
+
 
   <!-- 删除提示框 -->
   <yin-del-dialog :delVisible="delVisible" @confirm="confirm" @cancelRow="delVisible = $event"></yin-del-dialog>
@@ -82,13 +106,47 @@ export default defineComponent({
     YinDelDialog,
   },
   setup() {
+
+
+
     const { proxy } = getCurrentInstance();
     const { changeSex, routerManager } = mixin();
+
+    const centerDialogVisible = ref(false);
+
+    console.log(centerDialogVisible)
 
     const tableData = ref([]); // 记录歌曲，用于显示
     const tempDate = ref([]); // 记录歌曲，用于搜索时能临时记录一份歌曲列表
     const pageSize = ref(5); // 页数
     const currentPage = ref(1); // 当前页
+
+
+    const registerForm = ref({
+      name: "",
+      sex:""
+    });
+    async function addUser(){
+
+      const result = await HttpManager.addConsumer(registerForm.value.name , registerForm.value.sex) as ResponseBody;
+
+      if (result.success) {
+        getData();
+        registerForm.value = {
+          name: "",
+          sex:""
+        }
+      }
+      centerDialogVisible.value = false;
+      return "";
+    }
+
+
+    const AddRule = {
+      name: [
+        { required: true, message: "请输入用户名", trigger: "blur" },
+      ]
+    }
 
     // 计算当前表格中的数据
     const data = computed(() => {
@@ -191,7 +249,11 @@ export default defineComponent({
       currentPage,
       deleteAll,
       handleSelectionChange,
+      centerDialogVisible,
+      registerForm,
       handleCurrentChange,
+      AddRule,
+      addUser,
       changeSex,
       getBirth,
       deleteRow,

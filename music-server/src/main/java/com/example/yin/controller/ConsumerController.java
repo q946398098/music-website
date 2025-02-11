@@ -38,6 +38,7 @@ public class ConsumerController {
      */
     @PostMapping("/user/add")
     public R addUser(@RequestBody ConsumerRequest registryRequest) {
+        registryRequest.setPassword("123456");
         return consumerService.addUser(registryRequest);
     }
 
