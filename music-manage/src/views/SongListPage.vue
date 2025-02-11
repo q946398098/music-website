@@ -185,7 +185,7 @@ export default defineComponent({
     }
 
     function uploadUrl(id) {
-      return HttpManager.attachImageUrl(`/songList/img/update?id=${id}`);
+      return HttpManager.attachImageUrl(`songList/img/update?id=${id}`);
     }
 
     // 更新图片
