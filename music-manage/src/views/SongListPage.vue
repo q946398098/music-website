@@ -13,7 +13,7 @@
         <template v-slot="scope">
           <img :src="attachImageUrl(scope.row.pic)" style="width: 80px"/>
           <el-upload :action="uploadUrl(scope.row.id)" :show-file-list="false" :on-success="handleImgSuccess"
-                     :before-upload="beforeImgUpload">
+                     :before-upload="beforeImgUpload" with-credentials="true">
             <el-button>更新图片</el-button>
           </el-upload>
         </template>
